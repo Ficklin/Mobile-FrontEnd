@@ -3,7 +3,6 @@ import TaskContext from "../contexts/TaskContext";
 import {
   IonList,
   IonItem,
-  IonLabel,
   IonCheckbox,
   IonItemSliding,
   IonItemOptions,
@@ -12,12 +11,26 @@ import {
 } from "@ionic/react";
 import { useContext } from "react";
 import { trash } from "ionicons/icons";
+//import { useDialog } from "../hooks/useDialog";
 
-const TaskList = () => {
+const TaskList: React.FC<{ completed: boolean }> = () => {
   let { updateTask, deleteTask } = useContext(TaskContext);
+  //const { showPrompt } = useDialog(); // Need to edit task
+
+  // const correctTask = (taskId: number) => {
+  //   showPrompt("Edit Task", "Enter the updated task").then((newTitle) => {
+  //     if (newTitle) {
+  //       updateTask(taskId, { task: newTitle })
+  //         .then(() => {})
+  //         .catch((error: any) => {
+  //           console.error("Error updating task:", error);
+  //         });
+  //     }
+  //   });
+  // };
 
   const complete = (t: any) => {
-    updateTask(t.taskId, { Title: t.Title, Completed: true })
+    updateTask(t.taskId, { task: t.title, Completed: true })
       .then(() => {})
       .catch((error: any) => {
         console.log(error);
@@ -25,14 +38,14 @@ const TaskList = () => {
   };
 
   const incomplete = (t: any) => {
-    updateTask(t.taskId, { Title: t.Title, Completed: false })
+    updateTask(t.taskId, { task: t.title, Completed: false })
       .then(() => {})
       .catch((error: any) => {
         console.log(error);
       });
   };
 
-  const del = (taskId: string) => {
+  const del = (taskId: number) => {
     deleteTask(taskId)
       .then(() => {})
       .catch((error: any) => {
@@ -43,7 +56,7 @@ const TaskList = () => {
   return (
     <div>
       <div>
-        <h2 className="ion-margin-start">Incomplete</h2>
+        {/* <h2 className="ion-margin-start">Incomplete</h2> */}
         <TaskContext.Consumer>
           {({ task }) => {
             return (
@@ -51,17 +64,17 @@ const TaskList = () => {
                 {task.map((t: any) => {
                   if (!t.Completed) {
                     return (
-                      <IonItemSliding>
+                      <IonItemSliding key={t.taskId}>
                         <IonItem>
                           <IonCheckbox
-                            name={t.Title}
+                            labelPlacement="start"
+                            aria-label={t.title}
                             checked={false}
                             color="danger"
                             onClick={() => complete(t)}
-                          ></IonCheckbox>
-                          <IonLabel className="ion-margin-start">
+                          >
                             {t.Title}
-                          </IonLabel>
+                          </IonCheckbox>
                         </IonItem>
                         <IonItemOptions>
                           <IonItemOption>
@@ -82,7 +95,7 @@ const TaskList = () => {
         </TaskContext.Consumer>
       </div>
       <div>
-        <h2 className="ion-margin-start">Complete</h2>
+        {/* <h2 className="ion-margin-start">Complete</h2> */}
         <TaskContext.Consumer>
           {({ task }) => {
             return (
@@ -93,14 +106,14 @@ const TaskList = () => {
                       <IonItemSliding>
                         <IonItem>
                           <IonCheckbox
-                            name={t.Title}
+                            labelPlacement="start"
+                            aria-label={t.title}
                             checked={true}
                             color="danger"
                             onClick={() => incomplete(t)}
-                          ></IonCheckbox>
-                          <IonLabel className="ion-margin-start">
-                            {t.Title}
-                          </IonLabel>
+                          >
+                            {t.title}
+                          </IonCheckbox>
                         </IonItem>
                         <IonItemOptions>
                           <IonItemOption>

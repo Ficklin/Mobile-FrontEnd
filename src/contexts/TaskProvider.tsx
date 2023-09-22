@@ -2,10 +2,16 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import TaskContext from "./TaskContext";
 
-export const TaskProvider = (props: any) => {
+export const TaskProvider = ({ props }: any) => {
+  type task = {
+    taskId: number;
+    task: string;
+    completed: boolean;
+  };
+
   const [task, setTask] = useState([]);
 
-  const baseUrl = "http://localhost:3000/api/task/";
+  const baseUrl = "http://localhost:3000/api/task";
 
   useEffect(() => {
     async function fetchData() {
@@ -14,28 +20,30 @@ export const TaskProvider = (props: any) => {
     fetchData();
   }, []);
 
-  async function getAllTasks() {
-    const response = await axios.get(baseUrl);
-    return setTask(response.data);
+  function getAllTasks() {
+    return axios.get(baseUrl).then((response) => setTask(response.data));
   }
 
-  //missing the boolean
+  //A task is setup with unchecked button. So, it should defaulted false
   async function createTask(task: string) {
-    const response = await axios.post(baseUrl, task);
+    console.log("Task to be created:", task);
+
+    const response = await axios.post(baseUrl, { task, completed: false }); //0 for false
     getAllTasks();
     return await new Promise((resolve) => resolve(response.data));
   }
 
-  //missing the boolean
-  async function updateTask(taskId: number, task: string) {
-    let url = baseUrl + taskId;
-    const response = await axios.put(url, task);
-    getAllTasks();
-    return await new Promise((resolve) => resolve(response.data));
+  function updateTask(taskId: number, task: task) {
+    task.completed = !task.completed;
+    let url = baseUrl + "/" + taskId;
+    return axios.put(url, task).then((response) => {
+      getAllTasks();
+      return new Promise((resolve) => resolve(response.data));
+    });
   }
 
   async function deleteTask(taskId: number) {
-    let url = baseUrl + taskId;
+    let url = baseUrl + "/" + taskId;
     const response = await axios.delete(url);
     getAllTasks();
     return await new Promise((resolve) => resolve(response.data));

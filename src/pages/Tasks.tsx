@@ -13,7 +13,7 @@ import {
 } from "@ionic/react";
 import TaskList from "../components/TaskList";
 import { add } from "ionicons/icons";
-import { useContext } from "react";
+import React, { useContext } from "react";
 import { useDialog } from "../hooks/useDialog";
 import TaskContext from "../contexts/TaskContext";
 
@@ -22,7 +22,7 @@ function Tasks() {
   const { showPrompt } = useDialog();
 
   function handleAddTask() {
-    showPrompt("Hey!", "Enter task to greatest!").then((task) => {
+    showPrompt("Hey!", "Enter task to destiny!").then((task) => {
       createTask(task);
     });
   }
@@ -48,7 +48,7 @@ function Tasks() {
           </IonListHeader>
           <TaskList completed={false} />
         </IonList>
-
+        <></>
         <IonList>
           <IonListHeader color="secondary">
             <IonLabel>Complete Tasks</IonLabel>
