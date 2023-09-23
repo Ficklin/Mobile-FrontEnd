@@ -25,10 +25,13 @@ export const TaskProvider = (props: any) => {
   }
 
   //A task is setup with unchecked button. So, it should defaulted false
-  async function createTask(task: string) {
-    console.log("Task to be created:", task);
+  async function createTask(newTask: string) {
+    console.log("Task to be created:" + newTask);
 
-    const response = await axios.post(baseUrl, { task, completed: false }); //0 for false
+    const response = await axios.post(baseUrl, {
+      title: newTask,
+      completed: false,
+    }); //0 for false
     getAllTasks();
     return await new Promise((resolve) => resolve(response.data));
   }
