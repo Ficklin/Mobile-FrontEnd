@@ -11,26 +11,12 @@ import {
 } from "@ionic/react";
 import { useContext } from "react";
 import { trash } from "ionicons/icons";
-//import { useDialog } from "../hooks/useDialog";
 
-const TaskList: React.FC<{ completed: boolean }> = () => {
+const TaskList: React.FC<{ completed: boolean }> = ({ completed }) => {
   let { updateTask, deleteTask } = useContext(TaskContext);
-  //const { showPrompt } = useDialog(); // Need to edit task
-
-  // const correctTask = (taskId: number) => {
-  //   showPrompt("Edit Task", "Enter the updated task").then((newTitle) => {
-  //     if (newTitle) {
-  //       updateTask(taskId, { task: newTitle })
-  //         .then(() => {})
-  //         .catch((error: any) => {
-  //           console.error("Error updating task:", error);
-  //         });
-  //     }
-  //   });
-  // };
 
   const complete = (t: any) => {
-    updateTask(t.taskId, { task: t.title, Completed: true })
+    updateTask(t.taskId, { task: t.title, completed: true })
       .then(() => {})
       .catch((error: any) => {
         console.log(error);
@@ -38,7 +24,7 @@ const TaskList: React.FC<{ completed: boolean }> = () => {
   };
 
   const incomplete = (t: any) => {
-    updateTask(t.taskId, { task: t.title, Completed: false })
+    updateTask(t.taskId, { task: t.title, completed: false })
       .then(() => {})
       .catch((error: any) => {
         console.log(error);
@@ -56,7 +42,6 @@ const TaskList: React.FC<{ completed: boolean }> = () => {
   return (
     <div>
       <div>
-        {/* <h2 className="ion-margin-start">Incomplete</h2> */}
         <TaskContext.Consumer>
           {({ task }) => {
             return (
@@ -73,7 +58,7 @@ const TaskList: React.FC<{ completed: boolean }> = () => {
                             color="danger"
                             onClick={() => complete(t)}
                           >
-                            {t.Title}
+                            {t.title}
                           </IonCheckbox>
                         </IonItem>
                         <IonItemOptions>
@@ -95,7 +80,6 @@ const TaskList: React.FC<{ completed: boolean }> = () => {
         </TaskContext.Consumer>
       </div>
       <div>
-        {/* <h2 className="ion-margin-start">Complete</h2> */}
         <TaskContext.Consumer>
           {({ task }) => {
             return (

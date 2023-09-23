@@ -2,10 +2,10 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import TaskContext from "./TaskContext";
 
-export const TaskProvider = ({ props }: any) => {
+export const TaskProvider = (props: any) => {
   type task = {
     taskId: number;
-    task: string;
+    title: string;
     completed: boolean;
   };
 
